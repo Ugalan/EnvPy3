@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import pytest
+import sys
 
 TEST_RESULT = 0
 class TestCase:
@@ -25,27 +26,42 @@ class TestCase:
     def test_step(self, setup_module):
         print("\033[1;31;40m" + "test_step" + "\033[0m")
         assert 2 == 1 + 2
-
         global TEST_RESULT
         TEST_RESULT = 1
+"""
+    def assert_err(self):
+        assert 2 == 1 + 2
+
+    def sufshell(self):
+        yield print("\033[1;31;40m" + "sufshell_01" + "\033[0m")
+        yield self.assert_err(self)
+        yield print("\033[1;31;40m" + "sufshell_03" + "\033[0m")
+
+    def setup_class(self):
+        sys.excepthook = my_excepthook
+        print("\033[1;31;40m" + "setup_class" + "\033[0m")
+
+    def teardown_class(self):
+        for item in self.sufshell(self):
+            pass
+        # resenv = self.sufshell(self)
+        # next(resenv)
+
+    @pytest.mark.maintain_mng
+    def test_step(self):
+        print("\033[1;31;40m" + "test_step" + "\033[0m")
+        assert 2 == 2
+
+def my_excepthook(exc_type, exc_value, tb):
+    print("\033[1;31;40m" + "my_excepthook" + "\033[0m")
+
+if __name__ == '__main__':
+    sys.excepthook = my_excepthook
+"""
 """
         def teardown_module():
             print("\033[1;31;40m" + "teardown_module_01" + "\033[0m")
         request.addfinalizer(teardown_module)
 """
-"""
-    def setup_class(self):
-        print("\033[1;31;40m" + "setup_class" + "\033[0m")
 
-    def teardown_class(self):
-        print("\033[1;31;40m" + "teardown_class_01" + "\033[0m")
-        assert 2 == 1 + 1
-        print("\033[1;31;40m" + "teardown_class_02" + "\033[0m")
-        assert 2 == 1 + 2
-        print("\033[1;31;40m" + "teardown_class_03" + "\033[0m")
 
-    @pytest.mark.maintain_mng
-    def test_step(self):
-        print("\033[1;31;40m" + "test_step" + "\033[0m")
-        assert 2 == 1 + 1
-"""
